@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <!-- Console appender with a color-coded pattern -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %style{%25.-25t}{cyan} %style{%20.-20c{0}}{green} %highlight{%5p} %msg%n" disableAnsi="false"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- Root logger with 'info' level output for all packages -->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+
+        <!-- Logger for 'me.devjakob.clubserver' package with 'debug' level -->
+        <Logger name="me.devjakob.clubserver" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+    </Loggers>
+</Configuration>
