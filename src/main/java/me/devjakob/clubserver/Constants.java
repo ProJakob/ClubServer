@@ -13,8 +13,6 @@ public class Constants {
 
 	public static final int PORT = 25565;
 
-	public static final EventBus EVENTS = new EventBus((ex, ctx) -> {
-		LOG.error("Event {} caused an exception in {} ({})", ctx.getEvent().getClass().getSimpleName(), ctx.getSubscriber().getClass().getName(), ctx.getSubscriberMethod().getName(), ex);
-	});
+	public static final EventBus EVENTS = new EventBus((ex, ctx) -> LOG.error("Event {} caused an exception in {} ({})", ctx.getEvent().getClass().getSimpleName(), ctx.getSubscriber().getClass().getName(), ctx.getSubscriberMethod().getName(), ex));
 
 }
