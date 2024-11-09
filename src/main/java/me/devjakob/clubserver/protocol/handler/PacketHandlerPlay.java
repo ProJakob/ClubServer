@@ -56,7 +56,7 @@ public class PacketHandlerPlay extends SimpleChannelInboundHandler<Packet> {
         // Does not seem to have any noticable effect..?
         ctx.channel().writeAndFlush(bulk);
 
-        // Client seems to acknowledge chunks existing when sending this but not thr Bulk packet? Help required, im out of Ideas.
+        // Client seems to acknowledge chunks existing when sending this but not the Bulk packet? Help required, im out of Ideas.
         for (S21ChunkData datum : data) {
             ctx.channel().writeAndFlush(datum);
         }
