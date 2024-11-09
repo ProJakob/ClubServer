@@ -22,6 +22,9 @@ And of course we all learn more about our favourite block game with this!
 - [ ] World saving/loading (maybe)
 - More to come...
 
+## The Goal?
+Thats right, I have a set goal that I really want to get to: get this project so far that I can build a minigame with it, TNTRun or even BedWars if I get enough time.
+
 ## Sources
 I source my information from [wiki.vg](https://wiki.vg/index.php?title=Protocol&oldid=7368) and a decompiled Minecraft Client & Server Workspace that has been generated using [MCP](https://www.modcoderpack.com/) and [ForgeGradle](https://github.com/MinecraftForge/ForgeGradle)
 
