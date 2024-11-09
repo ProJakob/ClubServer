@@ -23,6 +23,9 @@ Simple: The Club comes from HackClub and the Server, well because it's a Server!
 - [ ] Probably some refactoring (PRs welcome)
 - [ ] Inventory handling
 - [ ] World saving/loading (maybe)
+- [ ] World interaction
+- [ ] Entities and other players (Forever alone :<)
+- [ ] Plugin API maybe??
 - More to come...
 
 ## The Goal?
