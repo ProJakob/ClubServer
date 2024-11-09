@@ -11,7 +11,7 @@ With this project I'm also actively learning how to use the netty library.
 And of course we all learn more about our favourite block game with this!
 
 ### Why the name?
-Simple: The hack comes from HackClub and the Server, well because it's a Server!
+Simple: The Club comes from HackClub and the Server, well because it's a Server!
 
 ## What is done?
 - [x] Spawning in
