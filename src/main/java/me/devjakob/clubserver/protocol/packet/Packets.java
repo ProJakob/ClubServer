@@ -1,5 +1,6 @@
 package me.devjakob.clubserver.protocol.packet;
 
+import me.devjakob.clubserver.Constants;
 import me.devjakob.clubserver.protocol.packet.handshaking.C00Handshake;
 import me.devjakob.clubserver.protocol.packet.login.C00LoginStart;
 import me.devjakob.clubserver.protocol.packet.login.S00Disconnect;
@@ -28,6 +29,8 @@ public enum Packets {
 			addPacket(Direction.CLIENTBOUND, 0x00, S00KeepAlive.class);
 			addPacket(Direction.CLIENTBOUND, 0x01, S01JoinGame.class);
 			addPacket(Direction.CLIENTBOUND, 0x02, S02ChatMessage.class);
+			addPacket(Direction.CLIENTBOUND, 0x08, S08PlayerPositionLook.class);
+			addPacket(Direction.CLIENTBOUND, 0x21, S21ChunkData.class);
 			addPacket(Direction.CLIENTBOUND, 0x40, S40Disconnect.class);
 			addPacket(Direction.CLIENTBOUND, 0x47, S47PlayerListHeaderFooter.class);
 
@@ -37,6 +40,13 @@ public enum Packets {
 			addPacket(Direction.SERVERBOUND, 0x04, C04PlayerPosition.class);
 			addPacket(Direction.SERVERBOUND, 0x05, C05PlayerLook.class);
 			addPacket(Direction.SERVERBOUND, 0x06, C06PlayerPositionLook.class);
+			addPacket(Direction.SERVERBOUND, 0x0A, C0AAnimaation.class);
+			addPacket(Direction.SERVERBOUND, 0x0B, C0BEntityAction.class);
+			addPacket(Direction.SERVERBOUND, 0x0D, C0DCloseWindow.class);
+			addPacket(Direction.SERVERBOUND, 0x13, C13PlayerAbilities.class);
+			addPacket(Direction.SERVERBOUND, 0x15, C15ClientSettings.class);
+			addPacket(Direction.SERVERBOUND, 0x16, C16ClientStatus.class);
+			addPacket(Direction.SERVERBOUND, 0x17, C17PluginMessage.class);
 		}
 	},
 	STATUS(1) {
@@ -68,6 +78,12 @@ public enum Packets {
 
 	private final Map<Direction, Map<Integer, Constructor<? extends Packet>>> packetRegistry = new HashMap<>();
 
+	public static void dump() {
+		for (Packets value : VALUES) {
+			System.out.println(value.name() + " (" + value.stateId + "): " + value.packetRegistry);
+		}
+	}
+
 	void addPacket(Direction direction, int id, Class<? extends Packet> clazz) {
 		try {
 			packetRegistry
@@ -79,6 +95,7 @@ public enum Packets {
 				packetIdLookup = new HashMap<>();
 			packetIdLookup.put(clazz, id);
 		} catch (NoSuchMethodException e) {
+			Constants.LOG.error("⚠️ Class {} is missing an empty constructor, can not continue!", clazz.getName());
 			throw new RuntimeException(e);
 		}
 	}
@@ -107,6 +124,7 @@ public enum Packets {
 	public static final Packets[] VALUES = new Packets[] { HANDSHAKING, PLAY, STATUS, LOGIN };
 
 	public static Packets getStateById(int stateId) {
+		// Using for loop instead of for-each to avoid compiler weirdness
 		for (int i = 0; i < VALUES.length; i++) {
 			Packets packet = VALUES[i];
 			if (packet.stateId == stateId) {

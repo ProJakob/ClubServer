@@ -1,8 +1,9 @@
-package me.devjakob.clubserver.protocol;
+package me.devjakob.clubserver.protocol.codec;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+import me.devjakob.clubserver.protocol.ProtocolUtil;
 import me.devjakob.clubserver.protocol.packet.Packet;
 import me.devjakob.clubserver.protocol.packet.Packets;
 

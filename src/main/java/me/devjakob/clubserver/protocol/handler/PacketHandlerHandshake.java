@@ -13,9 +13,10 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 public class PacketHandlerHandshake extends SimpleChannelInboundHandler<Packet> {
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, Packet msg) throws Exception {
+	protected void channelRead0(ChannelHandlerContext ctx, Packet msg) {
 		if(msg instanceof C00Handshake handshake) {
 			if(handshake.nextState == 1) {
+				ctx.channel().attr(ProtocolAttributes.PROTOCOL_STATE).set(1);
 				ctx.pipeline().replace(this, "handler", new PacketHandlerStatus());
 			} else if(handshake.nextState == 2) {
 				// Prevent clients that aren't 1.8.x from joining.
@@ -25,18 +26,17 @@ public class PacketHandlerHandshake extends SimpleChannelInboundHandler<Packet> 
 					return;
 				}
 
+				ctx.channel().attr(ProtocolAttributes.PROTOCOL_STATE).set(2);
 				ctx.pipeline().replace(this, "handler", new PacketHandlerLogin());
 			} else {
 				ctx.close();
-				return;
 			}
 
-			ctx.channel().attr(ProtocolAttributes.PROTOCOL_STATE).set(handshake.nextState);
 		}
 	}
 
 	@Override
-	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+	public void channelActive(ChannelHandlerContext ctx) {
 		Main.channels.add(ctx.channel());
 	}
 }

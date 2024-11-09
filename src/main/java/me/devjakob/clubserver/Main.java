@@ -16,7 +16,12 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import me.devjakob.clubserver.api.BasicHandler;
 import me.devjakob.clubserver.protocol.*;
+import me.devjakob.clubserver.protocol.codec.PacketDecoder;
+import me.devjakob.clubserver.protocol.codec.PacketEncoder;
+import me.devjakob.clubserver.protocol.codec.PacketSplitter;
+import me.devjakob.clubserver.protocol.codec.VarIntLengthFieldPrepender;
 import me.devjakob.clubserver.protocol.handler.PacketHandlerHandshake;
+import me.devjakob.clubserver.protocol.packet.Packets;
 
 public class Main {
 
@@ -30,6 +35,8 @@ public class Main {
 
         Constants.EVENTS.register(new BasicHandler());
 
+        Packets.dump();
+
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
@@ -37,12 +44,12 @@ public class Main {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
 
                         @Override
-                        protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.attr(ProtocolAttributes.PROTOCOL_STATE).set(-1);
-                            ch.attr(ProtocolAttributes.CONNECTION_INFO).set(new ConnectionInfo());
+                        protected void initChannel(SocketChannel ch) {
+                            ch.attr(ProtocolAttributes.CONNECTION_INFO).setIfAbsent(new ConnectionInfo());
 
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast("decoder", new PacketDecoder());
+                            pipeline.addLast("splitter", new PacketSplitter())
+                                    .addLast("decoder", new PacketDecoder());
 
                             pipeline.addLast("prepender", new VarIntLengthFieldPrepender());
                             pipeline.addLast("encoder", new PacketEncoder());

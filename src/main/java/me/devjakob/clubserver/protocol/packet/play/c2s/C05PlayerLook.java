@@ -5,15 +5,18 @@ import me.devjakob.clubserver.protocol.packet.Packet;
 
 import java.io.IOException;
 
-public class C05PlayerLook extends C03Player implements Packet {
+public class C05PlayerLook implements Packet {
 
 	public float yaw, pitch;
+	public boolean onGround;
 
 	@Override
 	public void readPacket(ByteBuf buf) throws IOException {
 		yaw = buf.readFloat();
 		pitch = buf.readFloat();
-		super.readPacket(buf);
+		onGround = buf.readBoolean();
 	}
+
+	@Override public void writePacket(ByteBuf buf) throws IOException {}
 
 }
