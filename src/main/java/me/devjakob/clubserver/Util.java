@@ -13,26 +13,27 @@ public class Util {
         byte[] b = new byte[buf.readableBytes()];
         buf.readBytes(b);
 
-        return new S21ChunkData(chunkX, chunkZ, true, 0b10, b);
+        return new S21ChunkData(chunkX, chunkZ, true, 0b1, b);
     }
 
     public static void writeFlatPlaneChunk(ByteBuf buf) {
         int t = 1;
         for (int i = 0; i < 16 * 16 * 16; i++) {
+            t = t == 1 ? 0 : 1;
             buf.writeByte(t & 255);
             buf.writeByte(t >> 8);
         }
 
         for (int i = 0; i < 4096; i++) {
-            buf.writeByte(0);
+            buf.writeByte(5);
         }
 
         for (int i = 0; i < 4096; i++) {
-            buf.writeByte(0);
+            buf.writeByte(5);
         }
 
         for (int i = 0; i < 256; i++) {
-            buf.writeByte(0);
+            buf.writeByte(1);
         }
     }
 

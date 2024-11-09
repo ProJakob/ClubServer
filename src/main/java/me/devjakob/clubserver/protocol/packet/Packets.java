@@ -31,6 +31,7 @@ public enum Packets {
 			addPacket(Direction.CLIENTBOUND, 0x02, S02ChatMessage.class);
 			addPacket(Direction.CLIENTBOUND, 0x08, S08PlayerPositionLook.class);
 			addPacket(Direction.CLIENTBOUND, 0x21, S21ChunkData.class);
+			addPacket(Direction.CLIENTBOUND, 0x26, S26MapChunkBulk.class);
 			addPacket(Direction.CLIENTBOUND, 0x40, S40Disconnect.class);
 			addPacket(Direction.CLIENTBOUND, 0x47, S47PlayerListHeaderFooter.class);
 

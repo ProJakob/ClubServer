@@ -5,13 +5,15 @@ import me.devjakob.clubserver.protocol.ProtocolUtil;
 import me.devjakob.clubserver.protocol.packet.Packet;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class S21ChunkData implements Packet {
 
-    private final int chunkX, chunkZ;
-    private final boolean groundUpContinuous;
-    private final int primaryBitMask;
-    private final byte[] data;
+    // Expose on packet level for S26MapChunkBulk
+    final int chunkX, chunkZ;
+    final boolean groundUpContinuous;
+    final int primaryBitMask;
+    final byte[] data;
 
     public S21ChunkData(int chunkX, int chunkZ, boolean groundUpContinuous, int primaryBitMask, byte[] data) {
         this.chunkX = chunkX;
@@ -34,5 +36,16 @@ public class S21ChunkData implements Packet {
         buf.writeBoolean(this.groundUpContinuous);
         buf.writeShort((short)(primaryBitMask & 65535));
         ProtocolUtil.writeByteArray(buf, data);
+    }
+
+    @Override
+    public String toString() {
+        return "S21ChunkData{" +
+                "chunkX=" + chunkX +
+                ", chunkZ=" + chunkZ +
+                ", groundUpContinuous=" + groundUpContinuous +
+                ", primaryBitMask=" + primaryBitMask +
+                ", data=" + Arrays.toString(data) +
+                '}';
     }
 }

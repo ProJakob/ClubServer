@@ -10,12 +10,12 @@ import me.devjakob.clubserver.protocol.ConnectionInfo;
 import me.devjakob.clubserver.protocol.ProtocolAttributes;
 import me.devjakob.clubserver.protocol.packet.Packet;
 import me.devjakob.clubserver.protocol.packet.play.c2s.C01ChatMessage;
-import me.devjakob.clubserver.protocol.packet.play.s2c.S01JoinGame;
-import me.devjakob.clubserver.protocol.packet.play.s2c.S02ChatMessage;
-import me.devjakob.clubserver.protocol.packet.play.s2c.S08PlayerPositionLook;
-import me.devjakob.clubserver.protocol.packet.play.s2c.S47PlayerListHeaderFooter;
+import me.devjakob.clubserver.protocol.packet.play.s2c.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PacketHandlerPlay extends SimpleChannelInboundHandler<Packet> {
 
@@ -45,10 +45,18 @@ public class PacketHandlerPlay extends SimpleChannelInboundHandler<Packet> {
         String name = ctx.channel().attr(ProtocolAttributes.CONNECTION_INFO).get().getName();
         Broadcast.broadcastPlay(new S02ChatMessage(Component.text(name + " joined the game").color(NamedTextColor.YELLOW), (byte) 0));
 
+        List<S21ChunkData> data = new ArrayList<>();
         for (int i = -10; i <= 10; i++) {
             for (int j = -10; j <= 10; j++) {
-                ctx.channel().writeAndFlush(Util.prepareFlatPacket(i, j));
+                data.add(Util.prepareFlatPacket(i, j));
             }
+        }
+        S26MapChunkBulk bulk = new S26MapChunkBulk(true, data.toArray(S21ChunkData[]::new));
+
+        ctx.channel().writeAndFlush(bulk);
+
+        for (S21ChunkData datum : data) {
+            ctx.channel().writeAndFlush(datum);
         }
     }
 }
