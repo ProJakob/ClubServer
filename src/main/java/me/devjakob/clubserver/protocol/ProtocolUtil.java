@@ -1,13 +1,21 @@
 package me.devjakob.clubserver.protocol;
 
+import dev.dewy.nbt.Nbt;
+import dev.dewy.nbt.tags.collection.CompoundTag;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
+import io.netty.util.ReferenceCountUtil;
 import me.devjakob.clubserver.except.SilentDecoderException;
+import me.devjakob.clubserver.util.ItemStack;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class ProtocolUtil {
+
+    public static final Nbt NBT = new Nbt();
 
     public static int readVarInt(ByteBuf buf) {
         int value = 0;
@@ -54,7 +62,9 @@ public class ProtocolUtil {
             throw new SilentDecoderException("Negative String length received");
         }
 
-        String str = buf.readBytes(length).toString(StandardCharsets.UTF_8);
+        ByteBuf read = buf.readBytes(length);
+        String str = read.toString(StandardCharsets.UTF_8);
+        ReferenceCountUtil.release(read);
 
         if (str.length() > maxLength) {
             throw new DecoderException("String exceeded max length, max is " + maxLength + " but got " + length);
@@ -76,6 +86,37 @@ public class ProtocolUtil {
     public static void writeByteArray(ByteBuf buf, byte[] bytes) {
         writeVarInt(buf, bytes.length);
         buf.writeBytes(bytes);
+    }
+
+    public static CompoundTag readNBTCompoundTag(ByteBuf buf) throws IOException {
+        int readerIndex = buf.readerIndex();
+        byte tagId = buf.readByte();
+
+        if(tagId == 0) {
+            return null;
+        } else {
+            buf.readerIndex(readerIndex);
+            try (ByteBufInputStream bbis = new ByteBufInputStream(buf)) {
+                return NBT.fromStream(bbis);
+            }
+        }
+    }
+
+    public static ItemStack readItemStack(ByteBuf buf) throws IOException {
+        short id = buf.readShort();
+
+        if(id >= 0) {
+            byte amount = buf.readByte();
+            short meta = buf.readShort();
+            CompoundTag nbtData = readNBTCompoundTag(buf);
+
+            ItemStack stack = new ItemStack(id, amount, meta);
+            stack.setNbt(nbtData);
+
+            return stack;
+        } else {
+            return null;
+        }
     }
 
 }

@@ -32,8 +32,6 @@ public class C0BEntityAction implements Packet {
         int actionId = ProtocolUtil.readVarInt(buf);
         action = Action.values()[actionId];
         actionParameter = ProtocolUtil.readVarInt(buf);
-
-        System.out.println(action);
     }
 
     @Override public void writePacket(ByteBuf buf) throws IOException {}

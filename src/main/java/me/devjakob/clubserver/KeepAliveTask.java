@@ -1,7 +1,6 @@
 package me.devjakob.clubserver;
 
 import me.devjakob.clubserver.protocol.packet.play.s2c.S00KeepAlive;
-import me.devjakob.clubserver.protocol.packet.play.s2c.S02ChatMessage;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,7 +17,7 @@ public class KeepAliveTask {
 			Constants.LOG.debug("Pinged {} clients", Main.channels.size());
 
 			Main.channels.writeAndFlush(new S00KeepAlive());
-			Main.channels.writeAndFlush(new S02ChatMessage());
+			//Main.channels.writeAndFlush(new S02ChatMessage());
 
 		}, 0, 15, TimeUnit.SECONDS);
 	}

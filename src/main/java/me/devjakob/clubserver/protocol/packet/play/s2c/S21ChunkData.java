@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class S21ChunkData implements Packet {
 
-    // Expose on packet level for S26MapChunkBulk
+    // Expose on package level for S26MapChunkBulk
     final int chunkX, chunkZ;
     final boolean groundUpContinuous;
     final int primaryBitMask;

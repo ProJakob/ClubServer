@@ -21,7 +21,7 @@ import me.devjakob.clubserver.protocol.codec.PacketEncoder;
 import me.devjakob.clubserver.protocol.codec.PacketSplitter;
 import me.devjakob.clubserver.protocol.codec.VarIntLengthFieldPrepender;
 import me.devjakob.clubserver.protocol.handler.PacketHandlerHandshake;
-import me.devjakob.clubserver.protocol.packet.Packets;
+import me.devjakob.clubserver.util.World;
 
 public class Main {
 
@@ -29,13 +29,15 @@ public class Main {
 
     public static final boolean EPOLL = Epoll.isAvailable();
 
+    public static World world;
+
     public static void main(String[] args) throws Exception {
+        world = new World();
+
         EventLoopGroup bossGroup = EPOLL ? new EpollEventLoopGroup(1) : new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
 
         Constants.EVENTS.register(new BasicHandler());
-
-        Packets.dump();
 
         try {
             ServerBootstrap b = new ServerBootstrap();

@@ -1,8 +1,11 @@
 package me.devjakob.clubserver.protocol;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ConnectionInfo {
+
+	private static final AtomicInteger playerCount = new AtomicInteger(0);
 
 	private int protocolVersion;
 	private String serverAddress;
@@ -10,6 +13,9 @@ public class ConnectionInfo {
 
 	private String name;
 	private UUID uuid;
+
+	private int entityId;
+	public double x, y, z;
 
 	public int getProtocolVersion() {
 		return protocolVersion;
@@ -54,5 +60,13 @@ public class ConnectionInfo {
 	public ConnectionInfo setUuid(UUID uuid) {
 		this.uuid = uuid;
 		return this;
+	}
+
+	public int getEntityId() {
+		return entityId;
+	}
+
+	public void assignEntityId() {
+		entityId = playerCount.incrementAndGet();
 	}
 }
